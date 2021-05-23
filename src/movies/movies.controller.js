@@ -31,8 +31,6 @@ async function list(req, res, next) {
 async function movieByTheaters (req, res, next) {
   const {movieId} = req.params;
 const allTheaters = await service.movieByTheaters(movieId)
-
-
 const time = new Date().toISOString();
 const data = allTheaters.map(theater => {
   return {...theater, created_at: time, updated_at: time}
@@ -45,13 +43,10 @@ async function movieByReviewAndCritic (req, res, next) {
 const time = new Date().toISOString();
 const {movieId} = req.params;
 const reviews = await service.movieByReview(movieId);
-console.log("11reviews", reviews)
 const critics = await service.listCritics();
-console.log("critics", critics)
 
 const data = reviews.map(review => {
   const critic = { critic: critics.find(critic => critic.critic_id === review.critic_id)}
-  console.log("one critic", critic)
 return {...review, created_at: time, updated_at: time, ...critic}
 })
 
@@ -59,18 +54,7 @@ res.json({data})
 }
 
 
-/*
 
-}
-
-async function movieByReviewAndCritic (req, res, next) {
-const time = new Date().toISOString();
-const {movieId} = req.params;
-const data = await service.movieByReviewAndCritic(movieId);
-
-res.json({data})
-}
-*/
 module.exports = {
   list,
   read: [asyncErrorBoundary(movieExists), read],
