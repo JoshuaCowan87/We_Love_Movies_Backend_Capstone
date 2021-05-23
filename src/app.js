@@ -3,11 +3,15 @@ const express = require("express");
 const app = express();
 const errorHandler = require("./errors/errorHandler");
 const moviesRouter = require("./movies/movies.router")
+const theatersRouter = require("./theaters/theaters.router")
+const reviewsRouter = require("./reviews/reviews.router")
 const notFound = require("./errors/notFound")
 
 app.use(express.json())
 
 app.use("/movies", moviesRouter)
+app.use("/theaters", theatersRouter)
+app.use("/reviews", reviewsRouter)
 
 
 
