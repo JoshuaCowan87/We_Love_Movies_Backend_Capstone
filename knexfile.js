@@ -4,6 +4,7 @@ if (process.env.USER) require("dotenv").config();
 
 const {
   DATABASE_URL = "postgres://mpeaokkf:DVvaxoHzITatm9LTOeqIHS2U8SrAs7IU@kashin.db.elephantsql.com:5432/mpeaokkf",
+  
 } = process.env;
 
 module.exports = {
