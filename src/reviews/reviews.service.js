@@ -2,16 +2,16 @@ const knex = require("../db/connection");
 const mapProperties = require("../utils/map-properties")
 
 const addCritic = mapProperties({
-    critic_id: "critics.critic_id",
-    preferred_name: "critics.preferred_name",
-    surname: "critics.surname",
-    organization_name: "critics.organization_name"
+    
+    preferred_name: "critic.preferred_name",
+    surname: "critic.surname",
+    organization_name: "critic.organization_name",
 })
 
-function read (reviewId) {
+function read (review_id) {
 return knex("reviews")
     .select("*")
-    .where({review_id: reviewId})
+    .where({review_id})
     .first()  
     
 }
@@ -24,19 +24,22 @@ return knex("reviews")
 }
 
 
-function update (updatedReview) {
+function update (updatedReview, review_id) {
+    console.log("service 1")
     return knex("reviews")
     .select("*")
-    .where({review_id: updatedReview.review_id})
-    .update(updatedReview)  
+    .where({review_id})
+    .update(updatedReview)
+    .then(updatedRecords => updatedRecords[0])
+    
 }
 
 
-function readUpdateWithCritic (reviewId){
+function readUpdateWithCritic (review_id){
 return knex("reviews as r")
     .join("critics as c", "r.critic_id", "c.critic_id")
     .select("*")
-    .where({review_id: reviewId})
+    .where({review_id})
     .first()
     .then(addCritic)
 }

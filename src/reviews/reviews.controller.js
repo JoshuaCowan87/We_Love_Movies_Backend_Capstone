@@ -1,28 +1,34 @@
 const service = require("./reviews.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
+const { times } = require("lodash");
 
 async function reviewExists(req, res, next) {
-  const reviewId = req.params.reviewId;
+  const {reviewId} = req.params;
   const review = await service.read(reviewId);
-console.log("review", review)
+  console.log("review", review)
   if (review) {
     res.locals.review = review;
-   // console.log("res.locals.review", res.locals.review)
     return next();
   }
   next({
     status: 404,
-    message: `Review ${reviewId} not found`,
+    message: `Review cannot be found`,
   });
 }
 
 async function update(req, res) {
+  const time = new Date().toISOString();
+  const {reviewId} = req.params;
+  
   console.log(1)
-  await service.update(req.body.data);
+   await service.update(req.body.data, reviewId);
   console.log(2)
-  const data = await service.readUpdateWithCritic(req.body.data);
+  const dataWithNoTimes = await service.readUpdateWithCritic(reviewId);
+  console.log(3)
+  const data = {...dataWithNoTimes, created_at: time, updated_at: time}
+  
   console.log("data", data);
-  res.json({ data: data });
+  res.json({ data });
 }
 
 async function destroy(req, res) {
@@ -32,5 +38,5 @@ async function destroy(req, res) {
 
 module.exports = {
   delete: [asyncErrorBoundary(reviewExists), asyncErrorBoundary(destroy)],
-  update: [reviewExists, asyncErrorBoundary(update)],
+  update: [asyncErrorBoundary(reviewExists), asyncErrorBoundary(update)],
 };
