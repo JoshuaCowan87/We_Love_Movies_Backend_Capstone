@@ -25,7 +25,6 @@ return knex("reviews")
 
 
 function update (updatedReview, review_id) {
-    console.log("service 1")
     return knex("reviews")
     .select("*")
     .where({review_id})

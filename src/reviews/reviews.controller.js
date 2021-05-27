@@ -19,15 +19,9 @@ async function reviewExists(req, res, next) {
 async function update(req, res) {
   const time = new Date().toISOString();
   const {reviewId} = req.params;
-  
-  console.log(1)
    await service.update(req.body.data, reviewId);
-  console.log(2)
-  const dataWithNoTimes = await service.readUpdateWithCritic(reviewId);
-  console.log(3)
+  const dataWithNoTimes = await service.readUpdateWithCritic(reviewId); 
   const data = {...dataWithNoTimes, created_at: time, updated_at: time}
-  
-  console.log("data", data);
   res.json({ data });
 }
 
